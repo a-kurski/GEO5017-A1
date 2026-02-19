@@ -26,11 +26,10 @@ def plot_basic(D):
     y = D[:, 1]
     z = D[:, 2]
 
+    # -- 3D plot
     fig = plt.figure(figsize=(10, 8))
     ax3d = fig.add_subplot(221, projection='3d')
-
-    ax3d.plot(x, y, z, color='blue',label="Measured")
-
+    ax3d.plot(x, y, z, color='blue',label="Measured", marker='s')
     ax3d.set_title("3D Trajectory")
     ax3d.set_xlabel("x")
     ax3d.set_ylabel("y")
@@ -61,3 +60,6 @@ def plot_basic(D):
     plt.tight_layout()
 
     plt.show()
+
+if __name__ == '__main__':
+    plot_basic(D)
