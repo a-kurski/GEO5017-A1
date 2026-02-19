@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #Variables
+#xyz value matrix
 D = np.array(
     [
         [2, 0, 1],
@@ -14,8 +15,10 @@ D = np.array(
     ]
 )
 
+#time value vector
 T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
 
+#gradient descent variables
 itter = 100
 tol = 0.1
 learn_rate = 0.001
@@ -24,54 +27,65 @@ x = D[:, 0]
 y = D[:, 1]
 z = D[:, 2]
 
-# Error sum
+# Error function
 def error_function(data, t, params):
+    #current estimates for a and b
     a, b = params
+    #Initialize error
     E = 0
+    #Summation
     for i in range(len(data)):
         E += (data[i] - (a * t[i] + b)) ** 2
     return E
 
-#
+#Gradient function (a and b derivative of error function
 def gradient_function(data, t, params):
+    #current estimates for a and b
     a, b = params
+    #Initialization of gradient A and B errors
     dEa = 0
     dEb = 0
 
+    #Sum of gradients errors
     for i in range(len(data)):
         error = data[i] - (a * t[i] + b)
         dEa += -2 * t[i] * error
         dEb += -2 * error
 
+    #returns calculated gradient error for a and b estimate
     return np.array([dEa, dEb])
 
 # -------------------------------
-def gradient_descent(start, gradient, learn_rate, max_iter, tol=0.01):
+def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
     params = start.copy()
+    #loops for n itterations or until descent value is less than tollerance
     for _ in range(max_iter):
-        diff = learn_rate * gradient(params)
+        diff = learn_rate * gradient_function(data,t,params)
+        #tollerance
         if np.linalg.norm(diff) < tol:
             break
+        #new parameters based on gradient and learning rate
         params = params - diff
     return params
 
 # -------------------------------
 def run_regression_all_dims(D, T):
-    learn_rate = 0.01
+    learn_rate = 1e-2
     max_iter = 1000
-    tol = 0.01
+    tol = 1e-10
     velocities = []
     intercepts = []
     total_error = 0
     # Loop over x, y, z (columns 0,1,2)
     for dim in range(3):
+        #retreives values for given dimension
         data = D[:, dim]
-        start = np.array([0.0, 0.0])  # initial guess [a, b]
-        grad = lambda params: gradient_function(data, T, params)
+        start = np.array([2.0, 2.0])  # initial guess [a, b]
 
         optimal_params = gradient_descent(
             start,
-            grad,
+            data,
+            T,
             learn_rate,
             max_iter,
             tol
@@ -81,7 +95,7 @@ def run_regression_all_dims(D, T):
 
         velocities.append(a_opt)
         intercepts.append(b_opt)
-        total_error += error_function(data, T, optimal_params)
+        total_error += error_function(data, T, optimal_params)**2
 
     velocity_vector = np.array(velocities)
     intercepts = np.array(intercepts)
@@ -93,7 +107,7 @@ def run_regression_all_dims(D, T):
     print(np.sqrt(velocity_vector[0] ** 2 + velocity_vector[1] ** 2 + velocity_vector[2] ** 2))
 
     print("\nTotal squared error:")
-    print(total_error)
+    print(np.sqrt(total_error))
 
     return velocity_vector, total_error, intercepts
 
