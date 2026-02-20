@@ -30,30 +30,32 @@ z = D[:, 2]
 # Error function
 def error_function(data, t, params):
     #current estimates for a and b
-    a, b = params
+    a, b, c = params
     #Initialize error
     E = 0
     #Summation
     for i in range(len(data)):
-        E += (data[i] - (a * t[i] + b)) ** 2
+        E += (data[i] - (a * t[i]**2 + b * t[i] + c)) ** 2
     return E
 
 #Gradient function (a and b derivative of error function
 def gradient_function(data, t, params):
     #current estimates for a and b
-    a, b = params
+    a, b, c = params
     #Initialization of gradient A and B errors
     dEa = 0
     dEb = 0
+    dEc = 0
 
     #Sum of gradients errors
     for i in range(len(data)):
-        error = data[i] - (a * t[i] + b)
-        dEa += -2 * t[i] * error
-        dEb += -2 * error
+        error = data[i] - (a * t[i]**2 + b * t[i] + c)
+        dEa += -2 * t[i]**2 * error
+        dEb += -2 * t[i] * error
+        dEc += -2 * error
 
     #returns calculated gradient error for a and b estimate
-    return np.array([dEa, dEb])
+    return np.array([dEa, dEb, dEc])
 
 # -------------------------------
 def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
@@ -70,9 +72,10 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
 
 # -------------------------------
 def run_regression_all_dims(D, T):
-    learn_rate = 1e-2
-    max_iter = 1000
+    learn_rate = 1e-4
+    max_iter = 50000
     tol = 1e-10
+    acceleration = []
     velocities = []
     intercepts = []
     total_error = 0
@@ -80,7 +83,7 @@ def run_regression_all_dims(D, T):
     for dim in range(3):
         #retreives values for given dimension
         data = D[:, dim]
-        start = np.array([2.0, 2.0])  # initial guess [a, b]
+        start = np.array([2.0, 2.0, 2.0])  # initial guess [a, b]
 
         optimal_params = gradient_descent(
             start,
@@ -91,14 +94,23 @@ def run_regression_all_dims(D, T):
             tol
         )
 
-        a_opt, b_opt = optimal_params
+        a_opt, b_opt, c_opt = optimal_params
 
-        velocities.append(a_opt)
-        intercepts.append(b_opt)
-        total_error += error_function(data, T, optimal_params)**2
+        acceleration.append(a_opt)
+        velocities.append(b_opt)
+        intercepts.append(c_opt)
+        total_error += error_function(data, T, optimal_params)
 
+    acceleration_vector = np.array(acceleration)
     velocity_vector = np.array(velocities)
     intercepts = np.array(intercepts)
+
+    print("Estimated acceleration vector [ax, ay, az]:")
+    print(acceleration_vector)
+
+    print("Total estimated acceleration vector [ax, ay, az]:")
+    print(np.sqrt(acceleration_vector[0]**2 + acceleration_vector[1]**2 + acceleration_vector[2]**2))
+    print("\n")
 
     print("Estimated velocity vector [vx, vy, vz]:")
     print(velocity_vector)
@@ -109,11 +121,8 @@ def run_regression_all_dims(D, T):
     print("\nTotal squared error:")
     print(np.sqrt(total_error))
 
-    return velocity_vector, total_error, intercepts
+    return velocity_vector, acceleration_vector, total_error, intercepts
 
 
 # -------------------------------
-velocity, error, intercepts = run_regression_all_dims(D, T)
-
-
-
+velocity, acceleration, error, intercepts = run_regression_all_dims(D, T)
