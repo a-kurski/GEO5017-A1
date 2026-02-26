@@ -49,7 +49,7 @@ def gradient_function(data, t, params):
         error = data[i] - (a * t[i] + b)
         dEa += -2 * t[i] * error
         dEb += -2 * error
-
+#eeeeee
     #returns calculated gradient error for a and b estimate
     return np.array([dEa, dEb])
 
