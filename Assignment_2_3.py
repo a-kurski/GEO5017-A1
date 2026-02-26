@@ -28,7 +28,7 @@ y = D[:, 1]
 z = D[:, 2]
 
 # Error function
-def error_function(data, t, params):
+def error_quadratic(data, t, params):
     #current estimates for a and b
     a, b, c = params
     #Initialize error
@@ -99,7 +99,7 @@ def run_regression_all_dims(D, T):
         acceleration.append(a_opt)
         velocities.append(b_opt)
         intercepts.append(c_opt)
-        total_error += error_function(data, T, optimal_params)
+        total_error += error_quadratic(data, T, optimal_params)
 
     acceleration_vector = np.array(acceleration)
     velocity_vector = np.array(velocities)
