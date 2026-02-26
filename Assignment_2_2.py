@@ -27,7 +27,7 @@ a = np.matmul(D_inv, D_dot)
 print("LSS:", a)
 
 # Error function
-def error_function(data, t, params):
+def error_linear(data, t, params):
     #current estimates for a and b
     a, b = params
     #Initialize error
@@ -37,7 +37,7 @@ def error_function(data, t, params):
         E += (data[i] - (a * t[i] + b)) ** 2
     return E
 
-#Gradient function (a and b derivative of error function
+#Gradient function (a and b derivative of error function)
 def gradient_function(data, t, params):
     #current estimates for a and b
     a, b = params
@@ -56,10 +56,10 @@ def gradient_function(data, t, params):
 # -------------------------------
 def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
     params = start.copy()
-    #loops for n itterations or until descent value is less than tollerance
-    for _ in range(max_iter):
+    #loops for n iterations or until descent value is less than tolerance
+    for i in range(max_iter):
         diff = learn_rate * gradient_function(data,t,params)
-        #tollerance
+        #tolerance
         if np.linalg.norm(diff) < tol:
             print("itteration: ",_)
             break
