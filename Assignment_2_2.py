@@ -17,11 +17,12 @@ D = np.array(
 
 #time value vector
 T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
-
+T_a = np.linalg.matrix_transpose([T,[1,1,1,1,1,1]])
+print(T_a)
 #least squares solution
-D_T = np.transpose(D)
-D_inv = np.linalg.inv(np.matmul(D_T,D))
-D_dot = np.matmul(D_T,T)
+D_T = np.transpose(T_a)
+D_inv = np.linalg.inv(np.matmul(D_T,T_a))
+D_dot = np.matmul(D_T,D)
 a = np.matmul(D_inv, D_dot)
 print("LSS:", a)
 
@@ -49,7 +50,6 @@ def gradient_function(data, t, params):
         error = data[i] - (a * t[i] + b)
         dEa += -2 * t[i] * error
         dEb += -2 * error
-#eeeeee
     #returns calculated gradient error for a and b estimate
     return np.array([dEa, dEb])
 
@@ -70,7 +70,7 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
 def run_regression_all_dims(D, T):
     learn_rate = 1e-4
     max_iter = 80000
-    tol = 1e-4
+    tol = 1e-8
     velocities = []
     intercepts = []
     total_error = 0
@@ -97,9 +97,11 @@ def run_regression_all_dims(D, T):
 
     velocity_vector = np.array(velocities)
     intercepts = np.array(intercepts)
+    total_error = total_error**2
 
     print("Estimated velocity vector [vx, vy, vz]:")
     print(velocity_vector)
+    print(intercepts)
 
     print("Total estimated velocity [m/s]:")
     print(np.sqrt(velocity_vector[0] ** 2 + velocity_vector[1] ** 2 + velocity_vector[2] ** 2))
@@ -112,4 +114,3 @@ def run_regression_all_dims(D, T):
 
 # -------------------------------
 velocity, error, intercepts = run_regression_all_dims(D, T)
-
