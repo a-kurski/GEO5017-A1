@@ -18,14 +18,12 @@ D = np.array(
 #time value vector
 T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
 
-#gradient descent variables
-itter = 100
-tol = 0.1
-learn_rate = 0.001
-
-x = D[:, 0]
-y = D[:, 1]
-z = D[:, 2]
+#least squares solution
+D_T = np.transpose(D)
+D_inv = np.linalg.inv(np.matmul(D_T,D))
+D_dot = np.matmul(D_T,T)
+a = np.matmul(D_inv, D_dot)
+print("LSS:", a)
 
 # Error function
 def error_function(data, t, params):
@@ -70,9 +68,9 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
 
 # -------------------------------
 def run_regression_all_dims(D, T):
-    learn_rate = 1e-2
-    max_iter = 1000
-    tol = 1e-10
+    learn_rate = 1e-4
+    max_iter = 80000
+    tol = 1e-4
     velocities = []
     intercepts = []
     total_error = 0
@@ -95,7 +93,7 @@ def run_regression_all_dims(D, T):
 
         velocities.append(a_opt)
         intercepts.append(b_opt)
-        total_error += error_function(data, T, optimal_params)**2
+        total_error += error_function(data, T, optimal_params)
 
     velocity_vector = np.array(velocities)
     intercepts = np.array(intercepts)
@@ -114,6 +112,4 @@ def run_regression_all_dims(D, T):
 
 # -------------------------------
 velocity, error, intercepts = run_regression_all_dims(D, T)
-
-
 
