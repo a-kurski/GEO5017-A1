@@ -1,42 +1,32 @@
-# imports
 import numpy as np
-import matplotlib.pyplot as plt
 
-#Variables
-#xyz value matrix
-D = np.array(
-    [
-        [2, 0, 1],
-        [1.08, 1.68, 2.38],
-        [-0.83, 1.82, 2.49],
-        [-1.97, 0.28, 2.15],
-        [-1.31, -1.51, 2.59],
-        [0.57, -1.91, 4.32]
-    ]
-)
-
-#time value vector
-T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
-
-#gradient descent variables
-
-x = D[:, 0]
-y = D[:, 1]
-z = D[:, 2]
-
-# Error function
 def error_linear(data, t, params):
-    #current estimates for a and b
-    a, b = params
-    #Initialize error
-    E = 0
-    #Summation
-    for i in range(len(data)):
-        E += (data[i] - (a * t[i] + b)) ** 2
-    return E
+    """
+    calculates the error for linear estimation of the function
 
-#Gradient function (a and b derivative of error function)
+    :param data: array of dependent variables x, y, z = f(t)
+    :param t: array of values for independent variable t
+    :param params: tuple of parameters a and b for estimated linear regression
+    :return e: sum of squared errors
+    """
+    # current estimates for a and b
+    a, b = params
+    # initialize error
+    e = 0
+    for i in range(len(data)):
+        # add error in the i-th dimension
+        e += (data[i] - (a * t[i] + b)) ** 2
+    return e
+
 def gradient_function(data, t, params):
+    """
+    calculates the error for current estimation of the function in a given dimensions
+
+    :param data: array of values for a given dependent variable
+    :param t: array of values for independent variable t
+    :param params: tuple of parameters a and b for estimated linear regression
+    :return errors: error for current set of parameters a, b
+    """
     #current estimates for a and b
     a, b = params
     #Initialization of gradient A and B errors
@@ -50,10 +40,21 @@ def gradient_function(data, t, params):
         dEb += -2 * error
 
     #returns calculated gradient error for a and b estimate
-    return np.array([dEa, dEb])
+    errors = np.array([dEa, dEb])
+    return errors
 
-# -------------------------------
 def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
+    """
+    performs gradient descent for linear estimation of the function in a given dimension
+
+    :param start: starting tuple of parameters (a, b)
+    :param data: array of values for a given dependent variable
+    :param t: array of values for independent variable t
+    :param learn_rate: learning rate for gradient descent
+    :param max_iter: maximum number of iterations for gradient descent
+    :param tol: tolerance
+    :return: tuple of parameters (a, b)
+    """
     params = start.copy()
     #loops for n iterations or until descent value is less than tolerance
     for i in range(max_iter):
@@ -65,11 +66,19 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
         params = params - diff
     return params
 
-# -------------------------------
 def run_regression_all_dims(D, T, learn_rate=1e-2, max_iter=1000, tol=1e-10):
-    learn_rate = 1e-2
-    max_iter = 1000
-    tol = 1e-10
+    """
+    performs regression for all dimensions
+
+    :param D: array of dependent variables x, y, z = f(t)
+    :param T: array of values for independent variable t
+    :param learn_rate: learning rate for gradient descent
+    :param max_iter: maximum number of iterations for gradient descent
+    :param tol: tolerance
+    :return velocity_vector: vector denoting the velocity (x, y, z)
+    :return total_error: total error
+    :return intercepts: vector denoting the position at t = 0 (x, y, z)
+    """
     velocities = []
     intercepts = []
     total_error = 0
@@ -107,10 +116,3 @@ def run_regression_all_dims(D, T, learn_rate=1e-2, max_iter=1000, tol=1e-10):
     print(np.sqrt(total_error))
 
     return velocity_vector, total_error, intercepts
-
-
-# -------------------------------
-velocity, error, intercepts = run_regression_all_dims(D, T)
-
-
-
