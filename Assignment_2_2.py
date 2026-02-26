@@ -17,12 +17,14 @@ D = np.array(
 
 #time value vector
 T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
-
-#gradient descent variables
-
-x = D[:, 0]
-y = D[:, 1]
-z = D[:, 2]
+T_a = np.linalg.matrix_transpose([T,[1,1,1,1,1,1]])
+print(T_a)
+#least squares solution
+D_T = np.transpose(T_a)
+D_inv = np.linalg.inv(np.matmul(D_T,T_a))
+D_dot = np.matmul(D_T,D)
+a = np.matmul(D_inv, D_dot)
+print("LSS:", a)
 
 # Error function
 def error_linear(data, t, params):
@@ -48,7 +50,6 @@ def gradient_function(data, t, params):
         error = data[i] - (a * t[i] + b)
         dEa += -2 * t[i] * error
         dEb += -2 * error
-
     #returns calculated gradient error for a and b estimate
     return np.array([dEa, dEb])
 
@@ -60,16 +61,17 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
         diff = learn_rate * gradient_function(data,t,params)
         #tolerance
         if np.linalg.norm(diff) < tol:
+            print("itteration: ",_)
             break
         #new parameters based on gradient and learning rate
         params = params - diff
     return params
 
 # -------------------------------
-def run_regression_all_dims(D, T, learn_rate=1e-2, max_iter=1000, tol=1e-10):
-    learn_rate = 1e-2
-    max_iter = 1000
-    tol = 1e-10
+def run_regression_all_dims(D, T):
+    learn_rate = 1e-4
+    max_iter = 80000
+    tol = 1e-8
     velocities = []
     intercepts = []
     total_error = 0
@@ -92,13 +94,15 @@ def run_regression_all_dims(D, T, learn_rate=1e-2, max_iter=1000, tol=1e-10):
 
         velocities.append(a_opt)
         intercepts.append(b_opt)
-        total_error += error_linear(data, T, optimal_params)**2
+        total_error += error_function(data, T, optimal_params)
 
     velocity_vector = np.array(velocities)
     intercepts = np.array(intercepts)
+    total_error = total_error**2
 
     print("Estimated velocity vector [vx, vy, vz]:")
     print(velocity_vector)
+    print(intercepts)
 
     print("Total estimated velocity [m/s]:")
     print(np.sqrt(velocity_vector[0] ** 2 + velocity_vector[1] ** 2 + velocity_vector[2] ** 2))
@@ -111,6 +115,3 @@ def run_regression_all_dims(D, T, learn_rate=1e-2, max_iter=1000, tol=1e-10):
 
 # -------------------------------
 velocity, error, intercepts = run_regression_all_dims(D, T)
-
-
-
