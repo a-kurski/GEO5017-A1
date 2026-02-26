@@ -61,6 +61,7 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
         diff = learn_rate * gradient_function(data,t,params)
         #tollerance
         if np.linalg.norm(diff) < tol:
+            print("itteration: ",_)
             break
         #new parameters based on gradient and learning rate
         params = params - diff

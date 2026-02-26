@@ -18,10 +18,22 @@ D = np.array(
 #time value vector
 T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
 
-#gradient descent variables
-itter = 100
-tol = 0.1
-learn_rate = 0.001
+#time value vector
+T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
+# Quadratic design matrix
+T_a = np.column_stack([
+    0.5 * T**2,   # acceleration term
+    T,            # velocity term
+    np.ones_like(T)  # intercept (starting position)
+])
+#least squares solution
+D_T = T_a.T
+D_inv = np.linalg.inv(D_T @ T_a)
+D_dot = D_T @ D
+params = D_inv @ D_dot
+
+print("Acceleration, Velocity, Position per dimension:")
+print(params)
 
 x = D[:, 0]
 y = D[:, 1]
@@ -35,7 +47,7 @@ def error_function(data, t, params):
     E = 0
     #Summation
     for i in range(len(data)):
-        E += (data[i] - (a * t[i]**2 + b * t[i] + c)) ** 2
+        E += (data[i] - (0.5 * a * t[i]**2 + b * t[i] + c)) ** 2
     return E
 
 #Gradient function (a and b derivative of error function
@@ -49,7 +61,7 @@ def gradient_function(data, t, params):
 
     #Sum of gradients errors
     for i in range(len(data)):
-        error = data[i] - (a * t[i]**2 + b * t[i] + c)
+        error = data[i] - (0.5 * a * t[i]**2 + b * t[i] + c)
         dEa += -2 * t[i]**2 * error
         dEb += -2 * t[i] * error
         dEc += -2 * error
@@ -73,8 +85,8 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
 # -------------------------------
 def run_regression_all_dims(D, T):
     learn_rate = 1e-4
-    max_iter = 50000
-    tol = 1e-10
+    max_iter = 80000
+    tol = 1e-8
     acceleration = []
     velocities = []
     intercepts = []
@@ -83,7 +95,7 @@ def run_regression_all_dims(D, T):
     for dim in range(3):
         #retreives values for given dimension
         data = D[:, dim]
-        start = np.array([2.0, 2.0, 2.0])  # initial guess [a, b]
+        start = np.array([4.0, 4.0, 4.0])  # initial guess [a, b]
 
         optimal_params = gradient_descent(
             start,
@@ -104,6 +116,7 @@ def run_regression_all_dims(D, T):
     acceleration_vector = np.array(acceleration)
     velocity_vector = np.array(velocities)
     intercepts = np.array(intercepts)
+    total_error = total_error ** 2
 
     print("Estimated acceleration vector [ax, ay, az]:")
     print(acceleration_vector)
