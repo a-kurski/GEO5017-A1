@@ -6,7 +6,7 @@ def error_linear(data, t, params):
 
     :param data: array of dependent variables x, y, z = f(t)
     :param t: array of values for independent variable t
-    :param params: tuple of parameters a and b for estimated linear regression
+    :param params: tuple of parameters a and b for estimated linear function
     :return e: sum of squared errors
     """
     # current estimates for a and b
@@ -24,7 +24,7 @@ def gradient_function(data, t, params):
 
     :param data: array of values for a given dependent variable
     :param t: array of values for independent variable t
-    :param params: tuple of parameters a and b for estimated linear regression f(x) = ax + b
+    :param params: tuple of parameters a and b for estimated linear function f(x) = ax + b
     :return errors: gradient error for current set of parameters a, b
     """
     #current estimates for a and b
@@ -42,7 +42,7 @@ def gradient_function(data, t, params):
     errors = np.array([dEa, dEb])
     return errors
 
-def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
+def gradient_descent(start, data,t, learn_rate, max_iter, tol):
     """
     performs gradient descent for linear estimation of the function in a given dimension
 
@@ -71,7 +71,7 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
 
 def solve(D, T, learn_rate=1e-4, max_iter=80000, tol=1e-8):
     """
-    performs regression for all dimensions
+    performs regression for all dimensions on linear function f(x) = ax + b
 
     :param D: array of dependent variables x, y, z = f(t)
     :param T: array of values for independent variable t
@@ -134,7 +134,7 @@ def main():
     print("Total estimated velocity [m/s]:")
     print(np.sqrt(velocity_vector[0] ** 2 + velocity_vector[1] ** 2 + velocity_vector[2] ** 2))
 
-    print("\nTotal squared error:")
+    print("Total squared error:")
     print(np.sqrt(total_error))
 
 if __name__ == "__main__":
