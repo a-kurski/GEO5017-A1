@@ -2,21 +2,35 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Error function
+
 def error_quadratic(data, t, params):
+    """
+    calculates the error for quadratic estimation of the function
 
-
+    :param data: array of dependent variables x, y, z = f(t)
+    :param t: array of values for independent variable t
+    :param params: tuple of parameters a and b for estimated quadratic function
+    :return e: sum of squared errors
+    """
     #current estimates for a, b, c
     a, b, c = params
     #Initialize error
-    E = 0
+    e = 0
     #Summation
     for i in range(len(data)):
-        E += (data[i] - (0.5 * a * t[i]**2 + b * t[i] + c)) ** 2
-    return E
+        e += (data[i] - (0.5 * a * t[i]**2 + b * t[i] + c)) ** 2
+    return e
 
-#Gradient function (a and b derivative of error function
+
 def gradient_function(data, t, params):
+    """
+    calculates the error for current estimation of the function in a given dimensions
+
+    :param data: array of values for a given dependent variable
+    :param t: array of values for independent variable t
+    :param params: tuple of parameters a and b for estimated quadratic f(t) = (at^2)/2 + bt + c
+    :return errors: gradient error for current set of parameters a, b
+    """
     #current estimates for a and b
     a, b, c = params
     #Initialization of gradient A and B errors
@@ -34,8 +48,18 @@ def gradient_function(data, t, params):
     #returns calculated gradient error for a and b estimate
     return np.array([dEa, dEb, dEc])
 
-# -------------------------------
-def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
+def gradient_descent(start, data,t, learn_rate, max_iter, tol):
+    """
+        performs gradient descent for quadratic estimation of the function in a given dimension
+
+        :param start: starting tuple of parameters (a, b, c)
+        :param data: array of values for a given dependent variable
+        :param t: array of values for independent variable t
+        :param learn_rate: learning rate for gradient descent
+        :param max_iter: maximum number of iterations for gradient descent
+        :param tol: tolerance
+        :return: tuple of parameters (a, b, c)
+        """
     params = start.copy()
     #loops for n iterations or until descent value is less than tolerance
     for i in range(max_iter):
@@ -49,6 +73,19 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
 
 # -------------------------------
 def solve(D, T, learn_rate=1e-4, max_iter=80000, tol=1e-8):
+    """
+    performs regression for all dimensions on linear function f(x) = ax + b
+
+    :param D: array of dependent variables x, y, z = f(t)
+    :param T: array of values for independent variable t
+    :param learn_rate: learning rate for gradient descent
+    :param max_iter: maximum number of iterations for gradient descent
+    :param tol: tolerance
+    :return velocity_vector: vector denoting the velocity (x, y, z)
+    :return acceleration_vector: vector denoting the acceleration (x, y, z)
+    :return total_error: total error
+    :return intercepts: vector denoting the position at t = 0 (x, y, z)
+    """
     acceleration = []
     velocities = []
     intercepts = []

@@ -2,6 +2,8 @@ import numpy as np
 from basic_plot import plot_basic
 import solve_linear
 import solve_quadratic
+import LSS_linear
+import LSS_quadratic
 
 def main():
     #array of output vars
@@ -18,7 +20,7 @@ def main():
     #array of input vars
     T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
 
-    velocity_linear, error_linear, intercepts_linear = solve_linear.solve(D, T)
+    velocity_linear, error_linear, intercepts_linear = solve_linear.solve(D, T, learn_rate=1e-4, max_iter=80000, tol=1e-8)
 
     print("Results of estimation with gradient descent on linear function:")
 
@@ -29,7 +31,11 @@ def main():
     print("Total squared error:")
     print(np.sqrt(error_linear))
 
-    velocity_quadratic, acceleration_quadratic, error_quadratic, intercepts_quadratic = solve_quadratic.solve(D, T)
+    # lss_l = LSS_linear.lss_linear(D, T)
+    # print("\nLSS estimate of linear function parameters:")
+    # print(lss_l)
+
+    velocity_quadratic, acceleration_quadratic, error_quadratic, intercepts_quadratic = solve_quadratic.solve(D, T, learn_rate=1e-4, max_iter=80000, tol=1e-8)
 
     print("\nResults of estimation with gradient descent on quadratic function:")
 
@@ -47,6 +53,15 @@ def main():
 
     print("Total squared error:")
     print(np.sqrt(error_quadratic))
+
+    # lss_q = LSS_quadratic.lss_quadratic(D, T)
+    # print("\nLSS estimate of acceleration, velocity, position per dimension:")
+    # print(lss_q)
+
+    p = intercepts_quadratic + 7 * velocity_quadratic + acceleration_quadratic * 49 / 2
+
+    print("\nDrone's estimated position at t = 7 is:")
+    print(p)
 
     plot_basic(D)
 
