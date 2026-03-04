@@ -59,7 +59,7 @@ def plot_basic(D):
 
     plt.tight_layout()
 
-    plt.show()
+    plt.draw()
 
 if __name__ == '__main__':
     plot_basic(D)

@@ -1,5 +1,4 @@
 import numpy as np
-from tqdm import tqdm
 
 def error_linear(data, t, params):
     """
@@ -59,7 +58,7 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
 
 
     #loop for n iterations or until descent value is less than tolerance
-    for i in tqdm(range(max_iter)):
+    for i in range(max_iter):
         diff = learn_rate * gradient_function(data,t,params)
 
         #check tolerance
@@ -111,6 +110,24 @@ def solve(D, T, learn_rate=1e-4, max_iter=80000, tol=1e-8):
     velocity_vector = np.array(velocities)
     intercepts = np.array(intercepts)
 
+    return velocity_vector, total_error, intercepts
+
+def main():
+    D = np.array(
+        [
+            [2, 0, 1],
+            [1.08, 1.68, 2.38],
+            [-0.83, 1.82, 2.49],
+            [-1.97, 0.28, 2.15],
+            [-1.31, -1.51, 2.59],
+            [0.57, -1.91, 4.32]
+        ]
+    )
+    # array of input vars
+    T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
+
+    velocity_vector, total_error, intercepts = solve(D, T)
+
     print("Estimated velocity vector [vx, vy, vz]:")
     print(velocity_vector)
 
@@ -120,7 +137,5 @@ def solve(D, T, learn_rate=1e-4, max_iter=80000, tol=1e-8):
     print("\nTotal squared error:")
     print(np.sqrt(total_error))
 
-    return velocity_vector, total_error, intercepts
-
-def main():
-    pass
+if __name__ == "__main__":
+    main()
