@@ -25,7 +25,10 @@ def main():
     T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
 
 
+    velocity_linear, error_linear, intercepts_linear = solve_linear.solve(D, T)
+
     plot_basic(D)
+
 
 
 if __name__ == '__main__':
