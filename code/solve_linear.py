@@ -1,4 +1,5 @@
 import numpy as np
+from tqdm import tqdm
 
 def error_linear(data, t, params):
     """
@@ -24,8 +25,8 @@ def gradient_function(data, t, params):
 
     :param data: array of values for a given dependent variable
     :param t: array of values for independent variable t
-    :param params: tuple of parameters a and b for estimated linear regression
-    :return errors: error for current set of parameters a, b
+    :param params: tuple of parameters a and b for estimated linear regression f(x) = ax + b
+    :return errors: gradient error for current set of parameters a, b
     """
     #current estimates for a and b
     a, b = params
@@ -39,7 +40,6 @@ def gradient_function(data, t, params):
         dEa += -2 * t[i] * error
         dEb += -2 * error
 
-    #returns calculated gradient error for a and b estimate
     errors = np.array([dEa, dEb])
     return errors
 
@@ -56,17 +56,21 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol=0.01):
     :return: tuple of parameters (a, b)
     """
     params = start.copy()
-    #loops for n iterations or until descent value is less than tolerance
-    for i in range(max_iter):
+
+
+    #loop for n iterations or until descent value is less than tolerance
+    for i in tqdm(range(max_iter)):
         diff = learn_rate * gradient_function(data,t,params)
-        #tolerance
+
+        #check tolerance
         if np.linalg.norm(diff) < tol:
             break
+
         #new parameters based on gradient and learning rate
         params = params - diff
     return params
 
-def run_regression_all_dims(D, T, learn_rate=1e-2, max_iter=1000, tol=1e-10):
+def solve(D, T, learn_rate=1e-4, max_iter=80000, tol=1e-8):
     """
     performs regression for all dimensions
 
@@ -82,6 +86,7 @@ def run_regression_all_dims(D, T, learn_rate=1e-2, max_iter=1000, tol=1e-10):
     velocities = []
     intercepts = []
     total_error = 0
+
     # Loop over x, y, z (columns 0,1,2)
     for dim in range(3):
         #retreives values for given dimension
@@ -116,3 +121,6 @@ def run_regression_all_dims(D, T, learn_rate=1e-2, max_iter=1000, tol=1e-10):
     print(np.sqrt(total_error))
 
     return velocity_vector, total_error, intercepts
+
+def main():
+    pass
