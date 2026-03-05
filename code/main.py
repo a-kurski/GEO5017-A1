@@ -8,21 +8,38 @@ import LSS_quadratic
 import argparse
 
 def main():
-    #array of output vars
-    D = np.array(
-        [
-            [2, 0, 1],
-            [1.08, 1.68, 2.38],
-            [-0.83, 1.82, 2.49],
-            [-1.97, 0.28, 2.15],
-            [-1.31, -1.51, 2.59],
-            [0.57, -1.91, 4.32]
-        ]
-    )
-    #array of input vars
-    T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
+    parser = argparse.ArgumentParser(description='GEO5017 Assignment 1 Solver')
+    parser.add_argument("input", help='input file (required)')
+    parser.add_argument('--lr', type=float, help='learning rate', default=0.0001)
+    parser.add_argument('--iter', type=int, help='maximum number of iterations', default=80000)
+    parser.add_argument('--tol', type=float, help='tolerance', default=1e-8)
 
-    velocity_linear, error_linear, intercepts_linear = solve_linear.solve(D, T, learn_rate=1e-4, max_iter=80000, tol=1e-8)
+    run_with_args(parser.parse_args())
+
+def run_with_args(args):
+    #
+    #
+    # #array of output vars
+    # D = np.array(
+    #     [
+    #         [2, 0, 1],
+    #         [1.08, 1.68, 2.38],
+    #         [-0.83, 1.82, 2.49],
+    #         [-1.97, 0.28, 2.15],
+    #         [-1.31, -1.51, 2.59],
+    #         [0.57, -1.91, 4.32]
+    #     ]
+    # )
+    # #array of input vars
+    # T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
+
+    inputfile = np.genfromtxt(args.input, delimiter=',')
+
+    # T = np.transpose(inputfile[:,0])
+    T = inputfile[:,0]
+    D = inputfile[:,1:]
+
+    velocity_linear, error_linear, intercepts_linear = solve_linear.solve(D, T, learn_rate=args.lr, max_iter=args.iter, tol=args.tol)
 
     print("Results of estimation with gradient descent on linear function:")
 
@@ -37,7 +54,7 @@ def main():
     # print("\nLSS estimate of linear function parameters:")
     # print(lss_l)
 
-    velocity_quadratic, acceleration_quadratic, error_quadratic, intercepts_quadratic = solve_quadratic.solve(D, T, learn_rate=1e-4, max_iter=80000, tol=1e-8)
+    velocity_quadratic, acceleration_quadratic, error_quadratic, intercepts_quadratic = solve_quadratic.solve(D, T, learn_rate=args.lr, max_iter=args.iter, tol=args.tol)
 
     print("\nResults of estimation with gradient descent on quadratic function:")
 
