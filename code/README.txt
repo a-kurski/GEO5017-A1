@@ -24,15 +24,22 @@ i is number of row
 
 ***RUNNING THE CODE***
 
-The code should be run in the terminal of your choosing in the subfolder 'code' because relative file paths rely on it.
+The code should be run in the terminal in the subfolder 'code' because relative file paths rely on it.
 
 The command should be formatted as:
-python main.py [PATH-TO-INPUT-FILE] [ARGS]
+python main.py [PATH-TO-INPUT-FILE] [ARGUMENTS]
 
 For example:
-python main.py ..\data\drone.csv --iter 100000 --lr 0.0001 --tol 0.00001
+cd GEO5017-A1/code
+python main.py ../data/drone.csv --lr 0.0001 --tol 0.00001
 
-the flags are:
---iter: maximum number of iterations prior to termination
---lr: learning rate
---tol: tolerance
+the arguments are non-positional and use flags:
+--iter: maximum number of iterations prior to termination (INT)
+--lr: learning rate (FLOAT)
+--tol: tolerance (FLOAT)
+
+***OUTPUT***
+the program outputs the required results of the estimation into the terminal.
+
+the program also generates pop-up windows with plots of the drone's position — these can be interacted with and saved as file.
+the pop-up windows need to be closed for the program to continue.
