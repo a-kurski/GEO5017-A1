@@ -40,6 +40,8 @@ def run_with_args(args):
 
     print("Results of estimation with gradient descent on linear function:")
 
+    print("Estimated position at t = 0 [x, y, z]:")
+    print(intercepts_linear)
     print("Estimated velocity vector [vx, vy, vz]:")
     print(velocity_linear)
     print("Total estimated velocity [m/s]:")
@@ -55,6 +57,9 @@ def run_with_args(args):
     velocity_quadratic, acceleration_quadratic, error_quadratic, intercepts_quadratic = solve_quadratic.solve(D, T, learn_rate=args.lr, max_iter=args.iter, tol=args.tol)
 
     print("\nResults of estimation with gradient descent on quadratic function:")
+
+    print("Estimated position at t = 0 [x, y, z]:")
+    print(intercepts_linear)
 
     print("Estimated acceleration vector [ax, ay, az]:")
     print(acceleration_quadratic)
