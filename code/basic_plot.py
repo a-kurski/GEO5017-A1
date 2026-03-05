@@ -2,26 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# -------------------------------
-#Variables
-D = np.array(
-    [
-        [2, 0, 1],
-        [1.08, 1.68, 2.38],
-        [-0.83, 1.82, 2.49],
-        [-1.97, 0.28, 2.15],
-        [-1.31, -1.51, 2.59],
-        [0.57, -1.91, 4.32]
-    ]
-)
-
-T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
-
-# -------------------------------
-# Points plotted in 3D and 2D
-
-
-def plot_basic(D):
+def plot_basic(D, title, colour='blue'):
     x = D[:, 0]
     y = D[:, 1]
     z = D[:, 2]
@@ -29,7 +10,8 @@ def plot_basic(D):
     # -- 3D plot
     fig = plt.figure(figsize=(10, 8))
     ax3d = fig.add_subplot(221, projection='3d')
-    ax3d.plot(x, y, z, color='blue',label="Measured", marker='s')
+    ax3d.plot(x, y, z, color=colour,# label="Measured",
+              marker='s')
     ax3d.set_title("3D Trajectory")
     ax3d.set_xlabel("x")
     ax3d.set_ylabel("y")
@@ -59,7 +41,21 @@ def plot_basic(D):
 
     plt.tight_layout()
 
-    plt.draw()
+    if title:
+        plt.title(title, figure=fig)
+
+    return fig
 
 if __name__ == '__main__':
+    D = np.array(
+        [
+            [2, 0, 1],
+            [1.08, 1.68, 2.38],
+            [-0.83, 1.82, 2.49],
+            [-1.97, 0.28, 2.15],
+            [-1.31, -1.51, 2.59],
+            [0.57, -1.91, 4.32]
+        ]
+    )
+
     plot_basic(D)
