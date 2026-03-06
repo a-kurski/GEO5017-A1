@@ -64,7 +64,7 @@ def gradient_descent(start, data,t, learn_rate, max_iter, tol):
     #loops for n iterations or until descent value is less than tolerance
     for i in range(max_iter):
         diff = learn_rate * gradient_function(data,t,params)
-        #tollerance
+        #tolerance
         if np.linalg.norm(diff) < tol:
             break
         #new parameters based on gradient and learning rate

@@ -33,13 +33,19 @@ For example:
 cd GEO5017-A1/code
 python main.py ../data/drone.csv --lr 0.0001 --tol 0.00001
 
-the arguments are non-positional and use flags:
+the ARGUMENTS (except input file) are non-positional and use flags:
 --iter: maximum number of iterations prior to termination (INT)
 --lr: learning rate (FLOAT)
---tol: tolerance (FLOAT)
+--tol: tolerance (FLOAT).
+
+The given data is stored in a CSV file: ../data/drone.csv.
+
+LSS solutions are not part of main.py.
+The linear and quadratic solution can be viewed by running LSS_linear.py and LSS_quadratic.py respectively.
+No arguments are to be provided, the input is hardcoded into the files.
 
 ***OUTPUT***
-the program outputs the required results of the estimation into the terminal.
+The program outputs the required results of the estimation into the terminal.
 
-the program also generates pop-up windows with plots of the drone's position — these can be interacted with and saved as file.
-the pop-up windows need to be closed for the program to continue.
+The program also generates pop-up windows with plots of the drone's position — these can be interacted with and saved as file.
+The pop-up windows need to be closed for the program to continue.

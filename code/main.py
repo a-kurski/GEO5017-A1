@@ -59,7 +59,7 @@ def run_with_args(args):
     print("\nResults of estimation with gradient descent on quadratic function:")
 
     print("Estimated position at t = 0 [x, y, z]:")
-    print(intercepts_linear)
+    print(intercepts_quadratic)
 
     print("Estimated acceleration vector [ax, ay, az]:")
     print(acceleration_quadratic)
