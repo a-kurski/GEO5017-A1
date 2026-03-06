@@ -47,7 +47,7 @@ def run_with_args(args):
     print("Total estimated velocity [m/s]:")
     print(np.sqrt(velocity_linear[0] ** 2 + velocity_linear[1] ** 2 + velocity_linear[2] ** 2))
     print("Total squared error:")
-    print(np.sqrt(error_linear))
+    print(error_linear)
 
     # lss_l = LSS_linear.lss_linear(D, T)
     # print("\nLSS estimate of linear function parameters:")

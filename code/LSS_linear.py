@@ -24,9 +24,20 @@ def main():
     # time value vector
     T = np.array([1, 2, 3, 4, 5, 6], dtype=float)
 
-    lss = LSS_linear(D, T)
+    lss = lss_linear(D, T)
 
     print("Linear LSS solution:", lss)
+
+    # 1. Recreate the design matrix used in the solver
+    T_a = np.transpose([T, [1, 1, 1, 1, 1, 1]])
+
+    # 2. Calculate the predicted positions (Design matrix multiplied by the LSS parameters)
+    D_pred = np.matmul(T_a, lss)
+
+    # 3. Calculate the sum of squared differences between predictions and actual data
+    total_error = np.sum((D_pred - D) ** 2)
+
+    print("Total squared error:", total_error)
 
 if __name__ == "__main__":
     main()

@@ -105,7 +105,7 @@ def solve(D, T, learn_rate=1e-4, max_iter=80000, tol=1e-8):
 
         velocities.append(a_opt)
         intercepts.append(b_opt)
-        total_error += error_linear(data, T, optimal_params)**2
+        total_error += error_linear(data, T, optimal_params)
 
     velocity_vector = np.array(velocities)
     intercepts = np.array(intercepts)
@@ -135,7 +135,7 @@ def main():
     print(np.sqrt(velocity_vector[0] ** 2 + velocity_vector[1] ** 2 + velocity_vector[2] ** 2))
 
     print("Total squared error:")
-    print(np.sqrt(total_error))
+    print(total_error)
 
 if __name__ == "__main__":
     main()

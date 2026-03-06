@@ -34,5 +34,20 @@ def main():
     print("Acceleration, Velocity, Position per dimension:")
     print(params)
 
+    # 1. Recreate the quadratic design matrix used in the solver
+    T_a = np.column_stack([
+        0.5 * T ** 2,
+        T,
+        np.ones_like(T)
+    ])
+
+    # 2. Calculate the predicted positions (Design matrix @ parameters)
+    D_pred = T_a @ params
+
+    # 3. Calculate the sum of squared differences
+    total_error = np.sum((D_pred - D) ** 2)
+
+    print("Total squared error:", total_error)
+
 if __name__ == "__main__":
     main()
